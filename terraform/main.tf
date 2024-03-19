@@ -1,14 +1,16 @@
 # main.tf
 
 provider "aws" {
-  region = "us-east-2"  # Adjust region as needed
+  region = "us-east-2"
 }
+
+variable "key_name" {}
 
 resource "aws_instance" "cluster" {
   count         = 200
-  ami           = "ami-065d315e052507855"  # AWS Linux 2 AMI, adjust as needed
+  ami           = "ami-065d315e052507855"  # Ubuntu 22.04 LTS
   instance_type = "t3.nano"
-  key_name      = var.key_name  # Adjust with your SSH key name
+  key_name      = var.key_name
   tags = {
     Name = "cluster-node-${count.index}"
   }
@@ -25,6 +27,7 @@ resource "aws_instance" "cluster" {
 		cd /home/ubuntu/bigdiv
 		make
 		./program 400 > /home/ubuntu/bigdiv/results.txt
+		EOF
 }
 
 output "public_ip_addresses" {
